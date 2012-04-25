@@ -1,6 +1,9 @@
 <?php
 
 namespace Exam\GeneratorBundle\Command;
+
+use Exam\GeneratorBundle\Entity\ExamConfig;
+
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,26 +14,33 @@ class GenerateCommand extends ContainerAwareCommand
 {
     protected function configure()
     {
-        $this->setName('demo:greet')->setDescription('Greet someone')
-                ->addArgument('name', InputArgument::OPTIONAL,
-                        'Who do you want to greet?')
-                ->addOption('yell', null, InputOption::VALUE_NONE,
-                        'If set, the task will yell in uppercase letters');
+        $this->setName('exam:generate')->setDescription('Generate Examination Packages')
+                ->addArgument('data-path', InputArgument::REQUIRED,
+                        'Where is the data(image and sound files)?')
+                ->addArgument('config-path', InputArgument::REQUIRED,
+                        'Where is the config files?')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $name = $input->getArgument('name');
-        if ($name) {
-            $text = 'Hello ' . $name;
-        } else {
-            $text = 'Hello';
-        }
+//         $name = $input->getArgument('name');
+//         if ($name) {
+//             $text = 'Hello ' . $name;
+//         } else {
+//             $text = 'Hello';
+//         }
 
-        if ($input->getOption('yell')) {
-            $text = strtoupper($text);
-        }
+//         if ($input->getOption('yell')) {
+//             $text = strtoupper($text);
+//         }
 
-        $output->writeln($text);
+//         $output->writeln($text);
+        $data_path = $input->getArgument('data-path');
+        $config = new ExamConfig($input->getArgument('config-path'));
+        $output->write(print_r($config, true));
+        $output->writeln("==============");
+        $output->writeln(print_r($config->getQuestionSize(), true));
+        $output->write(print_r($config->getAttribute(), true));
     }
 }
