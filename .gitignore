@@ -1,4 +1,5 @@
-vendor
-build
+/vendor
+/build
 .cproject
 .project
+/test
