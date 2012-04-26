@@ -42,15 +42,16 @@ add_subdirectory( mp3player )
 ## set resources
 
 set( TEST_ROOT "${CMAKE_SOURCE_DIR}/../test" )
+set( TEST_FILE_NAME "AD100301.MP3" )
+find_file( TEST_MP3 ${TEST_FILE_NAME} PATH ${TEST_ROOT} )
 
-find_file( TEST_MP3 "AD100301.MP3" PATH ${TEST_ROOT} )
-
-if(TEST_MP3)
-    message( "FOUND" )
-else()
-    message( "NOTFOUND" )
+if(NOT TEST_MP3)
+    message( "Starting download.." )
+    file(DOWNLOAD "http://dl.dropbox.com/u/11900271/${TEST_FILE_NAME}" "${TEST_ROOT}/${TEST_FILE_NAME}" LOG "${TEST_ROOT}/download.log" )
 endif()
 
 ## add tests
 
-#add_test(mp3player1
+enable_testing()
+
+add_test(mp3player1 "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/mp3player.exe" ${TEST_MP3})
