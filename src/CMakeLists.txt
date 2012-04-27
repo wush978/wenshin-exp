@@ -1,5 +1,7 @@
 cmake_minimum_required( VERSION 2.8 )
 
+message( "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}" )
+
 # set output location
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -19,12 +21,17 @@ set( FMOD_LIB_DIR "${FMOD_ROOT}/lib" )
 if(MSVC)
     message("This is MSVC")
     find_library( FMOD_LIB fmodex_vc ${FMOD_LIB_DIR} )
+elseif(MINGW)
+    message("This is MinGW")
+    find_library( FMOD_LIB libfmodex ${FMOD_LIB_DIR} )
 else()
     MESSAGE(FATAL_ERROR "TODO")
 endif()
 
 ## set dll
 if(MSVC)
+    set( FMOD_DLL "${FMOD_ROOT}/fmodex.dll" )
+elseif(MINGW)
     set( FMOD_DLL "${FMOD_ROOT}/fmodex.dll" )
 else()
     MESSAGE(FATAL_ERROR "TODO")
