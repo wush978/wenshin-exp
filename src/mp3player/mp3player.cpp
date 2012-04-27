@@ -26,7 +26,7 @@ void ERRCHECK(FMOD_RESULT result)
 int main(int argc, char* argv[])
 {
 	if (argc != 2) {
-		printf("Usage: console.exe <path to sound to play>");
+		printf("Usage: mp3player.exe <path to sound to play>");
 		return 0;
 	}
 	const int argv_file_path(1);
