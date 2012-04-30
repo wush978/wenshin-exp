@@ -64,9 +64,9 @@ int main(int argc, char *argv[]) {
 			sound, 0, &channel);
 	ERRCHECK(result);
 
-	printf("Press RETURN to top and quit.");
-	int i;
-	scanf("%d", &i);
+	printf("Enter any string to quit!");
+	char temp[100];
+	scanf("%s", temp);
 
 	/*
 	 Shut down
