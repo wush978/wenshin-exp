@@ -20,7 +20,7 @@ class Question
 
     /**
      * 
-     * @var Option[]
+     * @var Exam\GeneratorBundle\Entity\Option[]
      */
     protected $options = array();
 
@@ -30,6 +30,17 @@ class Question
      */
     protected $sound;
 
+    public function __construct($question_key, ExamConfig $exam_config) 
+    {
+        $this->setTitle($question_key);
+        $this->setDescription($exam_config->getQuestionAttribute($question_key, "description"));
+        $this->setSound($exam_config->getQuestionAttribute($question_key, "sound"));
+        foreach( $exam_config->getQuestionAttribute($question_key, "options") as $option_key => $option_value ) 
+        {
+            array_push($this->options, new Option($option_key, $question_key, $exam_config));    
+        }    
+    }
+    
     /**
      * @return the string
      */

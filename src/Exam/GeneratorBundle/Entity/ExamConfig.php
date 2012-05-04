@@ -16,7 +16,7 @@ class ExamConfig
      * 
      * @var Exam\GeneratorBundle\Entity\Question[]
      */
-    protected $entity = array();
+    protected $questions = array();
     
     /**
      * @var string
@@ -29,6 +29,12 @@ class ExamConfig
             throw new ExamException("Please install pecl::yaml package");
         }
         $this->content = yaml_parse_file($config_path);
+        foreach ($this->content as $question_key => $value) {
+            if ($question_key === self::$attribute_key) {
+                continue;
+            }
+            array_push($this->questions, new Question($question_key, $this));
+        }
     }
     
     public function getAttributes()
@@ -74,5 +80,26 @@ class ExamConfig
             return $this->getAttribute($attribute);
         }
         return $question[$attribute]; 
+    }
+    
+    public function getOptionAttribute($question_key, $option_key, $attribute) {
+        if (!array_key_exists($question_key, $this->content)) {
+            return null;
+        }
+        $question = $this->content[$question_key];
+        if (!array_key_exists("options", $question)) {
+            return null;
+        }
+        if (!is_array($question["options"])) {
+            return null;
+        }
+        if (!array_key_exists($option_key, $question["options"])) {
+            return null;
+        }
+        $option = $question["options"][$option_key];
+        if (!array_key_exists($attribute, $option)) {
+            return $this->getQuestionAttribute($question_key, $attribute);
+        }
+        return $option[$attribute];
     }
 }

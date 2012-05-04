@@ -23,6 +23,12 @@ class Option
      */
     protected $img = "";
 
+    public function __construct($option_key, $question_key, ExamConfig $exam_config) {
+        $this->setTitle($option_key);
+        $this->setDescription($exam_config->getOptionAttribute($question_key, $option_key, "description"));
+        $this->setImg($exam_config->getOptionAttribute($question_key, $option_key, "img"));
+    }
+    
     /**
      * @return the string
      */
