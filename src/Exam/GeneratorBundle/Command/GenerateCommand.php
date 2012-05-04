@@ -37,10 +37,10 @@ class GenerateCommand extends ContainerAwareCommand
 
 //         $output->writeln($text);
         $data_path = $input->getArgument('data-path');
-        $config = new ExamConfig($input->getArgument('config-path'));
+        $config = new ExamConfig($input->getArgument('data-path'), $input->getArgument('config-path'));
         $output->write(print_r($config, true));
         $output->writeln("==============");
         $output->writeln(print_r($config->getQuestionSize(), true));
-        $output->write(print_r($config->getAttribute(), true));
+        $output->write(print_r($config->getAttributes(), true));
     }
 }
