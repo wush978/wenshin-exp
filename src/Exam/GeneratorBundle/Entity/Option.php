@@ -40,7 +40,7 @@ class Option
     /**
      * @param string $title
      */
-    public function setTitle(string $title)
+    public function setTitle($title)
     {
         $this->title = $title;
     }
@@ -56,7 +56,7 @@ class Option
     /**
      * @param string $description
      */
-    public function setDescription(string $description)
+    public function setDescription($description)
     {
         $this->description = $description;
     }
@@ -72,7 +72,7 @@ class Option
     /**
      * @param string $img
      */
-    public function setImg(string $img)
+    public function setImg($img)
     {
         $this->img = $img;
     }

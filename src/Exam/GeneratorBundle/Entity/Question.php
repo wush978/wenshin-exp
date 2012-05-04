@@ -52,7 +52,7 @@ class Question
     /**
      * @param string $title
      */
-    public function setTitle(string $title)
+    public function setTitle($title)
     {
         $this->title = $title;
     }
@@ -68,7 +68,7 @@ class Question
     /**
      * @param string $description
      */
-    public function setDescription(string $description)
+    public function setDescription($description)
     {
         $this->description = $description;
     }
@@ -100,7 +100,7 @@ class Question
     /**
      * @param string $sound
      */
-    public function setSound(string $sound)
+    public function setSound($sound)
     {
         $this->sound = $sound;
     }
