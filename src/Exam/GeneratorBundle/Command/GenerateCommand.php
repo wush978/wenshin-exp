@@ -19,6 +19,8 @@ class GenerateCommand extends ContainerAwareCommand
                         'Where is the data(image and sound files)?')
                 ->addArgument('config-path', InputArgument::REQUIRED,
                         'Where is the config files?')
+                ->addArgument('output-path', InputArgument::REQUIRED,
+        				'Where to put the output files?')
         ;
     }
 
@@ -37,10 +39,9 @@ class GenerateCommand extends ContainerAwareCommand
 
 //         $output->writeln($text);
         $data_path = $input->getArgument('data-path');
-        $config = new ExamConfig($input->getArgument('data-path'), $input->getArgument('config-path'));
-        $output->write(print_r($config, true));
-        $output->writeln("==============");
-        $output->writeln(print_r($config->getQuestionSize(), true));
-        $output->write(print_r($config->getAttributes(), true));
+        $config_path = $input->getArgument('config-path');
+        $output_path = $input->getArgument('output-path');
+        $config = new ExamConfig($data_path, $config_path);
+        $config->render($data_path, $output_path);
     }
 }

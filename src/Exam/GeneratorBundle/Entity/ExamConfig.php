@@ -2,6 +2,7 @@
 namespace Exam\GeneratorBundle\Entity;
 
 use Exam\GeneratorBundle\Exception\ExamException;
+use Exam\GeneratorBundle\Resources\ExamTemplate;
 
 class ExamConfig
 {
@@ -29,7 +30,6 @@ class ExamConfig
             throw new ExamException("Please install pecl::yaml package");
         }
         $this->content = yaml_parse_file($config_path);
-        $this->convert($data_path);
         foreach ($this->content as $question_key => $value) {
             if ($question_key === self::$attribute_key) {
                 continue;
@@ -72,6 +72,10 @@ class ExamConfig
         return $this->content[$question_key];
     }
     
+    public function getQuestions() {
+        return $this->questions;
+    }
+    
     public function getQuestionAttribute($question_key, $attribute) {
         if (!array_key_exists($question_key, $this->content)) {
             return null;
@@ -104,6 +108,27 @@ class ExamConfig
         return $option[$attribute];
     }
     
+    public function render($data_path, $output_path) {
+        $data_path = self::checkPath($data_path);
+        $output_path = self::checkPath($output_path);
+        self::copy_directory($data_path, $output_path);
+        $questions = $this->getQuestions();
+        $question_keys = array_keys($questions);
+        for ($i = 0;$i < count($question_keys);$i++) {
+            $question_key = $question_keys[$i];
+            $question = $questions[$question_key];
+            if ($i < count($question_keys) - 1) {
+                $question_next_key = $question_keys[$i + 1];
+                $question_next = $questions[$question_next_key];
+                $exam_template = new ExamTemplate($question, $question_next);
+            }
+            else {
+                $exam_template = new ExamTemplate($question);
+            }
+            $exam_template->export($output_path);
+        }
+    }
+    
     private function convert($data_path) {
         $img_convert = $this->getAttribute("img_convert"); 
         if (is_null($img_convert)) {
@@ -132,4 +157,34 @@ class ExamConfig
         }
         die();
     }
+
+    static public function checkPath($path) {
+        if (strrpos($path, '/') + 1 != strlen($path)) {
+            $path .= '/';
+        }
+        return $path;
+    }
+    
+    static private function copy_directory( $source, $destination ) {
+        if ( is_dir( $source ) ) {
+            @mkdir( $destination );
+            $directory = dir( $source );
+            while ( FALSE !== ( $readdirectory = $directory->read() ) ) {
+                if ( $readdirectory == '.' || $readdirectory == '..' ) {
+                    continue;
+                }
+                $PathDir = $source . '/' . $readdirectory;
+                if ( is_dir( $PathDir ) ) {
+                    ExamConfig::copy_directory( $PathDir, $destination . '/' . $readdirectory );
+                    continue;
+                }
+                copy( $PathDir, $destination . '/' . $readdirectory );
+            }
+    
+            $directory->close();
+        }else {
+            copy( $source, $destination );
+        }
+    }
+    
 }

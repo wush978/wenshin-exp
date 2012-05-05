@@ -34,7 +34,9 @@ class Question
     {
         $this->setTitle($question_key);
         $this->setDescription($exam_config->getQuestionAttribute($question_key, "description"));
-        $this->setSound($exam_config->getQuestionAttribute($question_key, "sound"));
+        $sound_src = $exam_config->getQuestionAttribute($question_key, 'sound_src');
+        $sound_src = ExamConfig::checkPath($sound_src);
+        $this->setSound($sound_src . $exam_config->getQuestionAttribute($question_key, "sound"));
         foreach( $exam_config->getQuestionAttribute($question_key, "options") as $option_key => $option_value ) 
         {
             array_push($this->options, new Option($option_key, $question_key, $exam_config));    
