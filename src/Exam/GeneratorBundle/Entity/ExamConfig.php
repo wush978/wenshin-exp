@@ -125,8 +125,8 @@ class ExamConfig
             else {
                 $exam_template = new ExamTemplate($question);
             }
-            $exam_template->export($output_path);
         }
+        file_put_contents($output_path . 'out.html', ExamTemplate::getHtml());
     }
     
     private function convert($data_path) {

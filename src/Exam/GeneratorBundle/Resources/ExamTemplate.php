@@ -10,15 +10,18 @@ class ExamTemplate
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <script>
+	var Result = new Array(%question_size%);
+	var Question = new Array(%question_size%);
+	var question_index = 0;
+	function nextQuestion() {
+		is_play = false;
+		question_index++;
+		document.write(Question[question_index]);
+	}
 	function saveResult(result) {
-		var location = document.URL;
-		location = location.slice(7, location.length - 4);
-		location = location.concat("txt");
-		var fso = new ActiveXObject("Scripting.FileSystemObject");
-		var s = fso.CreateTextFile(location, true);
-		s.WriteLine(result);
-		s.Close();
-		document.getElementById("form").submit();
+		Result[question_index] = result;
+		question_index++;
+		nextQuestion();
 	}
 	function retrieveAnswer() {
 		var form = document.getElementById("form");
@@ -29,51 +32,52 @@ class ExamTemplate
 		}
 	}
 	var is_play = false;
-	function play() {
-		if (is_play) {
-			return false;
-		}
-		is_play = true;
-		var node = document.createElement("embed");
-		node.setAttribute("src","%sound_src%");
-		node.setAttribute("autostart","TRUE");
-		node.setAttribute("hidden","TRUE");
-		document.body.appendChild(node);
-		return true;
-	}
+	//%assign_Question%
 </script>
 </head>
-<body>
-%question_description%<br/>
-<a id="play" href="#" onclick="play()" style="" >播放</a><br/>
-
-<form id="form" action="%next_question%.html" method="post">
-	%options%
-	<input type="button" value="作答" onclick="saveResult(retrieveAnswer())"/>
-</form>
-<script>
-</script>
+<body onload="">
 </body>
 </html>    
 ';      
 
+    static private $question_size = 1;
+    
 	static private $option_template = '<input type="radio" name="answer" value="%option_title%"/><img src="%img_src%" width="%img_width%" height="%img_height%"/><br/>';
 
 	static private $file_name_template = '%question_title%.html';
 	
+	static private $body_template = '
+%question_description%<br/>
+<a id="play" href="#" onclick="play()" style="" >播放</a><br/> 
+
+<form id="form" action="%next_question%.html" method="post"> 
+	%options% 
+	<input type="button" value="作答" onclick="saveResult(retrieveAnswer())"/> 
+</form> 
+<script> 
+	function play() { 
+		if (is_play) { 
+			return false; 
+		} 
+		is_play = true; 
+		var node = document.createElement("embed"); 
+		node.setAttribute("src","%sound_src%"); 
+		node.setAttribute("autostart","TRUE"); 
+		node.setAttribute("hidden","TRUE");  
+		document.body.appendChild(node); 
+		return true; 
+	} 
+</script>';
+	
 	private $html = '';
 	private $file_name = '';
+	private $body = '';
+	private $assign_Question = '';
 	
 	public function __construct(Question $question, Question $question_next = null) {
-	    $this->file_name = str_replace('%question_title%', $question->getTitle(), self::$file_name_template);
-	    $this->html = str_replace('%sound_src%', $question->getSound(), self::$html_template);
-	    $this->html = str_replace('%question_description%', $question->getDescription(), $this->html);
-	    if (is_null($question_next)) {
-	        $this->html = str_replace('%next_question%','final',$this->html);
-	    }
-	    else {
-	        $this->html = str_replace('%next_question%',$question_next->getTitle(),$this->html);
-	    }
+	    // $this->file_name = str_replace('%question_title%', $question->getTitle(), self::$file_name_template);
+	    $this->body = str_replace('%sound_src%', $question->getSound(), self::$body_template);
+	    $this->body = str_replace('%question_description%', $question->getDescription(), $this->body);
 	    $options = '';
 	    foreach($question->getOptions() as $option) {
 	        /* @var Option $option */
@@ -83,11 +87,17 @@ class ExamTemplate
 	        $temp = str_replace('%img_height%', $option->getImgHeight(), $temp);
 	        $options .= $temp;
 	    }
-	    $this->html = str_replace('%options%', $options, $this->html);
+	    $this->body = str_replace('%options%', $options, $this->body);
+	    $this->assign_Question = 'Question[' . $question->getTitle() . '] = ' . "'" . $this->body . "';" . '
+	//%assign_Question%';
+	    $this->assign_Question = str_replace("\r\n", " \\ \r\n", $this->assign_Question);
+	    self::$question_size++;
+	    self::$html_template = str_replace('//%assign_Question%', $this->assign_Question, self::$html_template);
 	}
 	
-	public function export($out_dir) {
-	    file_put_contents($out_dir . $this->file_name, $this->html);
+	static public function getHtml() {
+	    self::$html_template = str_replace('%question_size%', self::$question_size, self::$html_template);
+	    return self::$html_template;
 	}
 	
 }
