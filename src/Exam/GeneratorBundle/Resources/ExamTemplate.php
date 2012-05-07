@@ -5,17 +5,17 @@ use Exam\GeneratorBundle\Entity\Question;
 
 class ExamTemplate 
 {
-    static private $html_template = '
-<html>
+    static private $html_template = '<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <script>
+	var hash = "%hash%";
 	var Result = new Array(%question_size%);
 	var Question = new Array(%question_size%);
 	var Sound_src = new Array(%question_size%);
 	var question_index = 0;
 	var question_size = %question_size%;
-	alert(question_size);
+	
 	function nextQuestion() {
 		is_play = false;
 		question_index++;
@@ -23,11 +23,22 @@ class ExamTemplate
 			document.body.innerHTML = Question[question_index];
 		}
 		else {
-			temp = "";
+			var result = "";
 			for(i = 1;i < question_size;i++) {
-				temp = temp + Result[i] + ",";
+				result = result + Result[i];
+				if (i + 1 < question_size) {
+					result = result + ",";
+				}
 			}
-			document.body.innerHTML = temp;
+			var fso = new ActiveXObject("Scripting.FileSystemObject");
+			var file_name = class_id + "_" + student_id + ".txt";
+			var location = document.URL;
+			location = location.slice(7, location.length - 8);
+			location = location.concat(file_name);
+			var s = fso.CreateTextFile(location, true);
+			s.WriteLine(result);
+			s.Close();
+			document.body.innerHTML = "謝謝你的作答，請將「" + file_name + "」放到老師指定的位置。" ;
 		}	
 	}
 	function saveResult(result) {
@@ -62,9 +73,32 @@ class ExamTemplate
 	var is_play = false;
 	//%assign_Question%
 	//%assign_Sound_src%
+	
+	function debug() {
+		alert(document.body.innerHTML.toString());
+	}
+	
+	var class_id;
+	var student_id;
+	function startTest() {
+		var temp;
+		class_id = document.getElementById("class_id").value;
+		student_id = document.getElementById("student_id").value;
+		temp = "你的班級: " + class_id + "<br/>";
+		temp = temp + "你的座號: " + student_id + "<br/>";
+		temp = temp + \'<input type="button" onclick="nextQuestion()" value="是"/><br/>\';
+		temp = temp + \'<input type="button" onclick="beginPage()" value="否"/><br/>\';
+		document.body.innerHTML = temp;  
+	}
+	
+	function beginPage() {
+		document.body.innerHTML = \'班級:<input id="class_id" type="text"/><br/>	座號:<input id="student_id" type="text"/><br/><input type="button" onclick="startTest()" value="開始作答"/>\';		
+	}
+	
 </script>
 </head>
-<body onload="nextQuestion()">
+<body onload="beginPage()">
+		
 </body>
 </html>    
 ';      
@@ -77,6 +111,7 @@ class ExamTemplate
 	
 	static private $body_template = '
 <h1>%question_title%</h1>
+<input type="button" value="除錯" onclick="debug()"/><br/>
 %question_description%<br/>
 <hr>
 <a id="play" href="#" onclick="play()" style="" >播放</a><br/> 
