@@ -21,6 +21,8 @@ class GenerateCommand extends ContainerAwareCommand
                         'Where is the config files?')
                 ->addArgument('output-path', InputArgument::REQUIRED,
         				'Where to put the output files?')
+				->addArgument('hash', InputArgument::REQUIRED,
+						'What is the hash of the answer?')
         ;
     }
 
@@ -41,7 +43,8 @@ class GenerateCommand extends ContainerAwareCommand
         $data_path = $input->getArgument('data-path');
         $config_path = $input->getArgument('config-path');
         $output_path = $input->getArgument('output-path');
-        $config = new ExamConfig($data_path, $config_path);
+		$hash = $input->getArgument('hash');
+        $config = new ExamConfig($data_path, $config_path, $hash);
         $config->render($data_path, $output_path);
     }
 }

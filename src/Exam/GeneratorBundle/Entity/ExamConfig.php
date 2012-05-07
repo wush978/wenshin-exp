@@ -23,8 +23,13 @@ class ExamConfig
      * @var string
      */
     static protected $attribute_key = '_attribute';
+	
+	/**
+	 * @var string
+	 */
+	protected $hash = '';
     
-    public function __construct($data_path, $config_path)
+    public function __construct($data_path, $config_path, $hash)
     {
         if (!function_exists('yaml_parse_file')) {
             throw new ExamException("Please install pecl::yaml package");
@@ -36,6 +41,7 @@ class ExamConfig
             }
             array_push($this->questions, new Question($question_key, $this));
         }
+		$this->hash = $hash;
     }
     
     public function getAttributes()
@@ -126,7 +132,8 @@ class ExamConfig
                 $exam_template = new ExamTemplate($question);
             }
         }
-        file_put_contents($output_path . 'out.html', ExamTemplate::getHtml());
+		$hash = $this->hash;
+        file_put_contents($output_path . "out_$hash.html", ExamTemplate::getHtml($this->hash));
     }
     
     private function convert($data_path) {

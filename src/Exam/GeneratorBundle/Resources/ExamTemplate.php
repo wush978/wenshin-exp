@@ -31,9 +31,9 @@ class ExamTemplate
 				}
 			}
 			var fso = new ActiveXObject("Scripting.FileSystemObject");
-			var file_name = class_id + "_" + student_id + ".txt";
+			var file_name = class_id + "_" + student_id + "_" + hash + ".txt";
 			var location = document.URL;
-			location = location.slice(7, location.length - 8);
+			location = location.slice(7, location.length - 41);
 			location = location.concat(file_name);
 			var s = fso.CreateTextFile(location, true);
 			s.WriteLine(result);
@@ -153,8 +153,9 @@ class ExamTemplate
 	    self::$question_size++;
 	}
 	
-	static public function getHtml() {
+	static public function getHtml($hash) {
 	    self::$html_template = str_replace('%question_size%', self::$question_size, self::$html_template);
+		self::$html_template = str_replace('%hash%', $hash, self::$html_template);
 	    return self::$html_template;
 	}
 	
