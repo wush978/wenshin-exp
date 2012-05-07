@@ -26,10 +26,21 @@ $option_template = <<<EOF
 
 EOF;
 
-$config =$header;
-$answer_index = 1;
+
+function make_seed()
+{
+  list($usec, $sec) = explode(' ', microtime());
+  return (float) $sec + ((float) $usec * 100000);
+}
+srand(make_seed());
+$answer_list = array();
+for ($repeat = 1;$repeat <= 40;$repeat++) {
+$config = $header;
+$answer = '';
 for ($question_index = 1;$question_index <= 10;$question_index++)
 {
+	$answer_index = (string) rand(1, 2);
+	$answer .= $answer_index . ",";
     $temp = str_replace("%question_index%", $question_index, $question_template);
     $temp = str_replace("%answer_index%", $answer_index, $temp);
     $config .= $temp;
@@ -40,5 +51,10 @@ for ($question_index = 1;$question_index <= 10;$question_index++)
         $config .= $temp;
     }
 }
-echo $config;
+$hash = md5($answer . "wushsand");
+file_put_contents("exam_config/config_" . $hash . ".yml", $config);
+$answer_list[$hash] = $answer;
+}
+print_r($answer_list);
+file_put_contents("exam_config/answer.txt", base64_encode(serialize($answer_list)));
 ?>
