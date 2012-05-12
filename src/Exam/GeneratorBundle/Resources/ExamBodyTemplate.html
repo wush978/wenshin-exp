@@ -1,0 +1,12 @@
+<h1>%question_title%</h1>
+<input type="button" value="除錯" onclick="debug()"/><br/>
+%question_description%<br/>
+<hr>
+<input type="button" value="播放" id="play" onclick="play()" style="" />
+<embed src="%sound_src%" hidden="true" autostart="false" />
+<br/> 
+<hr>
+<form id="form" action="%next_question%.html" method="post"> 
+	%options% 
+	<input type="button" value="作答" onclick="saveResult(retrieveAnswer())"/> 
+</form>
