@@ -1,0 +1,109 @@
+_attribute:
+  img_src: img
+  sound_src: sound
+  js_src: js
+  img_width: "960"
+  img_height: "540"
+  description: |
+    各位小朋友，請你在看完以下兩首樂譜之後，按下播放鍵聆聽耳機中的樂曲。
+    在聆聽完樂曲之後，從這兩首樂譜之中選出你所聽到的歌曲。
+1:
+  sound: 1-1mid.MID
+  answer: 1
+  options:
+    1:
+      img: 1-1pic.jpg
+      description: ""
+    2:
+      img: 1-2pic.jpg
+      description: ""
+2:
+  sound: 2-1mid.MID
+  answer: 1
+  options:
+    1:
+      img: 2-1pic.jpg
+      description: ""
+    2:
+      img: 2-2pic.jpg
+      description: ""
+3:
+  sound: 3-2mid.MID
+  answer: 2
+  options:
+    1:
+      img: 3-1pic.jpg
+      description: ""
+    2:
+      img: 3-2pic.jpg
+      description: ""
+4:
+  sound: 4-2mid.MID
+  answer: 2
+  options:
+    1:
+      img: 4-1pic.jpg
+      description: ""
+    2:
+      img: 4-2pic.jpg
+      description: ""
+5:
+  sound: 5-2mid.MID
+  answer: 2
+  options:
+    1:
+      img: 5-1pic.jpg
+      description: ""
+    2:
+      img: 5-2pic.jpg
+      description: ""
+6:
+  sound: 6-1mid.MID
+  answer: 1
+  options:
+    1:
+      img: 6-1pic.jpg
+      description: ""
+    2:
+      img: 6-2pic.jpg
+      description: ""
+7:
+  sound: 7-2mid.MID
+  answer: 2
+  options:
+    1:
+      img: 7-1pic.jpg
+      description: ""
+    2:
+      img: 7-2pic.jpg
+      description: ""
+8:
+  sound: 8-2mid.MID
+  answer: 2
+  options:
+    1:
+      img: 8-1pic.jpg
+      description: ""
+    2:
+      img: 8-2pic.jpg
+      description: ""
+9:
+  sound: 9-2mid.MID
+  answer: 2
+  options:
+    1:
+      img: 9-1pic.jpg
+      description: ""
+    2:
+      img: 9-2pic.jpg
+      description: ""
+10:
+  sound: 10-1mid.MID
+  answer: 1
+  options:
+    1:
+      img: 10-1pic.jpg
+      description: ""
+    2:
+      img: 10-2pic.jpg
+      description: ""
