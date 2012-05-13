@@ -51,7 +51,7 @@ class ExamTemplate
     
     private function modifyJs() {
         $this->replaceJs('%hash%', $this->config->getHash());
-        $this->replaceJs('%question_size%', (string) $this->config->getQuestionSize());
+        $this->replaceJs('%question_size%', (string) ($this->config->getQuestionSize() + 1));
         foreach ($this->config->getQuestions() as $question) {
             $this->assignQuestion($question);
         }

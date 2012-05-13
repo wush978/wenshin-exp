@@ -60,12 +60,21 @@ class ExamData
      */
     private $is_learned_music;
     
+    
     /**
      * 
      * @ORM\Column(length=64)
      * @var unknown_type
      */
     private $start_music_year_old;
+    
+    
+    /**
+     * 
+     * @ORM\Column(length=64)
+     * @var unknown_type
+     */
+    private $music_subject;
     
     /**
      * 
@@ -211,13 +220,14 @@ class ExamData
         $this->input_text = file_get_contents($file_name);
         $this->input_text = iconv("big5","UTF-8",$this->input_text);
         $this->parseFileName($file_name);
-        $this->sex = $this->parseInfo('2.性別:', '<br/><hr/>');
-        $this->is_learned_music = $this->parseInfo('3.', '學過獨奏樂器<br/>');
+        $this->sex = $this->parseInfo('2\.性別:', '<br/><hr/>');
+        $this->is_learned_music = $this->parseInfo('<br/><hr/>3\.', '學過獨奏樂器<br/>');
         $this->start_music_year_old = $this->parseInfo('從', '歲開始,');
-        $this->how_long_learn_music = $this->parseInfo('樂器名稱: ' , '<br/>');
-        $this->is_join_music_group = $this->parseInfo('4.','參加過或目前正參加學校音樂性社團<br/>');
-        $this->joined_music_group_name = $this->parseInfo('名稱:','<br/><hr/>');
-        $this->is_join_music_cram_school = $this->parseInfo('5.','<br/>');
+        $this->music_subject = $this->parseInfo('樂器名稱: ' , '<br/>');
+        $this->how_long_learn_music = $this->parseInfo('學了', '年<br/><hr/>');
+        $this->is_join_music_group = $this->parseInfo('年<br/><hr/>4\.','參加過或目前正參加學校音樂性社團<br/>');
+        $this->joined_music_group_name = $this->parseInfo('參加過或目前正參加學校音樂性社團<br/>名稱:','<br/><hr/>');
+        $this->is_join_music_cram_school = $this->parseInfo('<br/><hr/>5\.','<br/>');
         $this->music_cram_school_name = $this->parseInfo('課程名稱: ', '<br/>');
         $this->music_cram_school_subject = $this->parseInfo('家教名稱: ', '<br/><hr/>');
         $this->parseAnswer();
@@ -229,7 +239,7 @@ class ExamData
         $file_name_info = explode('_', $file_name);
         $this->school = $file_name_info[0];
         $this->level = $file_name_info[1];
-        $this->class = $file_name_info[2];
+        $this->class_var = $file_name_info[2];
         $this->student_id = $file_name_info[3];
         $this->hash = $file_name_info[4];
         $this->hash = explode('.', $this->hash);
@@ -237,9 +247,16 @@ class ExamData
     }
     
     private function parseInfo($prefix, $suffix) {
-        $pattern = '@' . $prefix . '(?P<retval>\w+)' . $suffix . '@uU';
+        $pattern = '@' . $prefix . '(?P<retval>.*)' . $suffix . '@uU';
         preg_match($pattern, $this->input_text, $matches);
-        return $matches['retval'];
+        if (array_key_exists('retval', $matches)) {
+            return $matches['retval'];
+        }
+        else {
+            print_r($prefix);
+            print_r($suffix);
+            die(print_r($matches, true));
+        }
     }
     
     private function parseAnswer() {

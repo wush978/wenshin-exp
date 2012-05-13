@@ -120,7 +120,7 @@ class ExamConfig
         self::copy_directory($data_path, $output_path);
         $exam_template = new ExamTemplate($this);
         file_put_contents($output_path . 'js/exam.js', $exam_template->getJs());
-        file_put_contents($output_path . 'out.html', $exam_template->getHtml());
+        file_put_contents($output_path . 'out_' . $this->hash . '.html', $exam_template->getHtml());
     }
     
     private function convert($data_path) {

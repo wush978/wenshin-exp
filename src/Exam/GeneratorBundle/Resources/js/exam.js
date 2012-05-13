@@ -36,9 +36,9 @@ function nextQuestion() {
     s.Close();
     var duration_end = timer.getTime();
     if (duration_end - duration_start > minutes * 8) {
-      alert("%secret_message%")
+      alert("")
     }
-    document.body.innerHTML = "謝謝你的作答，請將「" + file_name + "」放到老師指定的位置。" ;
+    document.body.innerHTML = "謝謝你的作答，請將「" + location + "」放到老師指定的位置。" ;
   } 
 }
 
@@ -60,7 +60,7 @@ function retrieveAnswer() {
   }
 }
 var played_time;
-var sound_source;
+// var sound_source;
 function play() {
   if (played_time >= 2) {
     return false;
@@ -73,7 +73,7 @@ function play() {
   return true;
 } 
 function stop() {
-  sound_source = document.getElementById("embed").getAttribute("src");
+//  sound_source = document.getElementById("embed").getAttribute("src");
   document.body.innerHTML = Question[question_index];
 //  document.getElementById("embed").setAttribute("src", "");
 //  document.getElementById("input_stop").style.visibility = "hidden";
@@ -132,7 +132,7 @@ function startTest() {
       how_long_learn_music = "1-2";
     }
     if (document.getElementById("input_how_long_learn_music4").checked) {
-      how_long_learn_music = "2-3";
+      how_long_learn_music = "2+";
     }
   }
   if (document.getElementById("input_is_join_music_group_no").checked) {
@@ -154,7 +154,7 @@ function startTest() {
     music_cram_school_subject = "NA";
   }
   if (document.getElementById("input_is_join_music_cram_school_yes_single").checked) {
-    is_join_music_cram_school = "有參加課外自費音樂家教";
+    is_join_music_cram_school = "有參加課外自費音樂個別課";
     music_cram_school_name = "NA";
     music_cram_school_subject = document.getElementById("input_music_cram_school_subject").value;
   }
@@ -171,8 +171,8 @@ function startTest() {
     '4.' + is_join_music_group + '參加過或目前正參加學校音樂性社團<br/>' +
     '名稱:' + joined_music_group_name + '<br/><hr/>' +
     '5.' + is_join_music_cram_school + '<br/>' +
-    '課程名稱: ' + music_cram_school_name + '<br/>' +
-    '家教名稱: ' + music_cram_school_subject + '<br/><hr/>' +
+    '團體課名稱: ' + music_cram_school_name + '<br/>' +
+    '個別課名稱: ' + music_cram_school_subject + '<br/><hr/>' +
     '<input type="button" onclick="nextQuestion()" value="資料正確"/><input type="button" onclick="beginPage()" value="資料錯誤，我要重新輸入"/>';   
   document.body.innerHTML = personal_data;  
 }
@@ -194,7 +194,7 @@ function beginPage() {
     '<input type="radio" name="input_how_long_learn_music" value="0-0.5" id="input_how_long_learn_music1">半年以內</input><br/>' +
     '<input type="radio" name="input_how_long_learn_music" value="0.5-1" id="input_how_long_learn_music2">半年到一年</input><br/>' +
     '<input type="radio" name="input_how_long_learn_music" value="1-2" id="input_how_long_learn_music3">一年到兩年</input><br/>' +
-    '<input type="radio" name="input_how_long_learn_music" value="2-3" id="input_how_long_learn_music4">兩年到三年</input><br/><hr/>' +
+    '<input type="radio" name="input_how_long_learn_music" value="2-3" id="input_how_long_learn_music4">兩年以上</input><br/><hr/>' +
     '4.你是否參加過或目前正參加學校音樂性社團？(例如：合唱團、節奏樂隊、管樂團、國樂團、節令鼓)<br/>' +
     '<input type="radio" name="input_is_join_music_group" value="no" id="input_is_join_music_group_no">無</input><br/>' +
     '<input type="radio" name="input_is_join_music_group" value="yes" id="input_is_join_music_group_yes">有</input>, ' +
@@ -205,7 +205,7 @@ function beginPage() {
     '音樂團體課，例如「山葉團體鍵盤課」、「朱宗慶打擊樂團」等…<br/>' +
     '(請說明課程名稱: <input type="text" id="input_music_cram_school_name"/>)<br/>' +
     '<input type="radio" name="input_is_join_music_cram_school" value="yes_single" id="input_is_join_music_cram_school_yes_single">有</input>, ' +
-    '音樂家教，例如鋼琴、小提琴、長笛、吉他等…<br/>' +
+    '音樂個別課，例如鋼琴、小提琴、長笛、吉他等…<br/>' +
     '(請說明課程名稱: <input type="text" id="input_music_cram_school_subject"/>)<br/><hr/>' +
     '<input type="button" onclick="startTest()" value="開始作答"/>';    
 }
