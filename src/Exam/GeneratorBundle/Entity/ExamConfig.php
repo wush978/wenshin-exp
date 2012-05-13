@@ -118,22 +118,8 @@ class ExamConfig
         $data_path = self::checkPath($data_path);
         $output_path = self::checkPath($output_path);
         self::copy_directory($data_path, $output_path);
-        $questions = $this->getQuestions();
-        $question_keys = array_keys($questions);
-        for ($i = 0;$i < count($question_keys);$i++) {
-            $question_key = $question_keys[$i];
-            $question = $questions[$question_key];
-            if ($i < count($question_keys) - 1) {
-                $question_next_key = $question_keys[$i + 1];
-                $question_next = $questions[$question_next_key];
-                $exam_template = new ExamTemplate($question, $question_next);
-            }
-            else {
-                $exam_template = new ExamTemplate($question);
-            }
-        }
-		$hash = $this->hash;
-        file_put_contents($output_path . "out_$hash.html", ExamTemplate::getHtml($this->hash));
+        $exam_template = new ExamTemplate($this);
+        file_put_contents($output_path . 'js/exam.js', $exam_template->getJs());
     }
     
     private function convert($data_path) {
@@ -194,4 +180,7 @@ class ExamConfig
         }
     }
     
+    public function getHash() {
+        return $this->hash;
+    }
 }
