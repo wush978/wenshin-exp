@@ -158,7 +158,7 @@ function startTest() {
     music_cram_school_name = "NA";
     music_cram_school_subject = document.getElementById("input_music_cram_school_subject").value;
   }
-  personal_data = '1.國小:' + level +
+  personal_data = '1.國小:' + school +
     '年級:' + level +
     '班級:' + class_var +
     '座號:' + student_id + '<br/>' + 
