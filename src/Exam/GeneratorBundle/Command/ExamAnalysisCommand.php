@@ -2,7 +2,7 @@
 
 namespace Exam\GeneratorBundle\Command;
 
-use Exam\GeneratorBundle\Entity\PersonalData;
+use Exam\GeneratorBundle\Entity\ExamData;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -13,6 +13,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ExamAnalysisCommand extends ContainerAwareCommand {
 
+    protected function initialize($input, $output) {
+        
+    }
+    
     protected function configure()
     {
         $this->setName('exam:analysis')->setDescription('Analyze Result')
@@ -33,7 +37,7 @@ class ExamAnalysisCommand extends ContainerAwareCommand {
         $version = $input->getArgument('version');
         $output_path = $input->getArgument('output-path');
         $answer_path = $input->getArgument('answer-path');
-        $personal_data = new PersonalData($result_path, $answer_path, $version);
+        $personal_data = new ExamData($result_path, $answer_path, $version);
     }
         
     
