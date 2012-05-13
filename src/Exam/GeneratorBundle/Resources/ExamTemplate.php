@@ -34,10 +34,10 @@ class ExamTemplate
      */
     private $body_template;
     
-    public function __construct(ExamController $config) {
+    public function __construct(ExamConfig $config) {
         $this->config = $config;
-        $this->html = file_get_contents(__DIR__ . 'ExamTemplate.html');
-        $this->js = file_get_contents(__DIR__ . 'js/exam.js');
+        $this->html = file_get_contents(__DIR__ . '/ExamTemplate.html');
+        $this->js = file_get_contents(__DIR__ . '/js/exam.js');
         $this->modifyJs();
     }
     
@@ -45,12 +45,17 @@ class ExamTemplate
         return $this->js;
     }
     
+    public function getHtml() {
+        return $this->html;
+    }
+    
     private function modifyJs() {
-        replaceJs('%hash%', $config->getHash());
-        replaceJs('%question_size', (string) $this->config->getQuestionSize());
+        $this->replaceJs('%hash%', $this->config->getHash());
+        $this->replaceJs('%question_size%', (string) $this->config->getQuestionSize());
         foreach ($this->config->getQuestions() as $question) {
             $this->assignQuestion($question);
         }
+        $this->replaceJs('%secret_message%', $this->config->getAttribute('secret_message'));
     }
     
     private function replaceJs($search, $replace) {
@@ -59,6 +64,8 @@ class ExamTemplate
     
     private function assignQuestion(Question $question) {
         $assign_string = 'Question[' . $question->getTitle() . '] = ' . "'" . ExamBodyTemplate::renderBody($question) . "';";
-        replaceJs('//%assign_Question%', $assign_string);
+        $assign_string = str_replace("\n", "' + \n '", $assign_string);
+        $assign_string .= "\n\t//%assign_Question%\n"; 
+        $this->replaceJs('//%assign_Question%', $assign_string);
     }
 }

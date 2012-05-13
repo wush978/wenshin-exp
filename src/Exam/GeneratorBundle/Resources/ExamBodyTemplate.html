@@ -2,19 +2,12 @@
 <input type="button" value="除錯" onclick="debug()"/><br/>
 %question_description%<br/>
 <hr>
-<input type="button" value="播放" id="play" onclick="play()" style="" />
+<input type="button" value="播放" id="input_play" onclick="play()" style="visibility:visible" />
+<input type="button" value="停止" id="input_stop" onclick="stop()" style="visibility:hidden" />
+<input type="hidden" value="%sound_src%" id="sound_source_input" />
 <br/> 
 <hr>
 <form id="form"> 
 	%options% 
 	<input type="button" value="作答" onclick="saveResult(retrieveAnswer())"/> 
 </form>
-<script>
-function appendEmbed() {
-	var node = document.createElement("embed"); 
-	node.setAttribute("src","%sound_src%"); 
-	node.setAttribute("autostart","true"); 
-	node.setAttribute("hidden","true");  
-	document.body.appendChild(node);
-}
-</script>

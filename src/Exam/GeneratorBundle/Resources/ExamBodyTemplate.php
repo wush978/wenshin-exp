@@ -9,17 +9,15 @@ class ExamBodyTemplate
     private $body;
     
     public function __construct(Question $question) {
-        $this->body = file_get_contents(__DIR__ . 'ExamBodyTemplate.html');
-        replaceBody('%question_title%',$question->getTitle());
-        replaceBody('%question_description%',$question->getDescription());
-        replaceBody('%sound_src%',$question->getSound());
+        $this->body = file_get_contents(__DIR__ . '/ExamBodyTemplate.html');
+        $this->replaceBody('%question_title%',$question->getTitle());
+        $this->replaceBody('%question_description%',$question->getDescription());
+        $this->replaceBody('%sound_src%',$question->getSound());
         $options_string = '';
         foreach ($question->getOptions() as $option) {
             $options_string .= ExamOptionTemplate::renderOption($option);
         }
-        replaceBody('%options%', $options_string);
-        replaceBody("\n", "' + \n '");
-        $this->body .= "\n\t//%assign_Question%\n";
+        $this->replaceBody('%options%', $options_string);
     }
     
     public function getBody() {

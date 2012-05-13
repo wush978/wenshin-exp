@@ -9,7 +9,7 @@ class ExamOptionTemplate
     private $option;
     
     public function __construct(Option $option) {
-        $this->option = file_get_contents(__DIR__ . 'ExamOptionTemplate.html');
+        $this->option = file_get_contents(__DIR__ . '/ExamOptionTemplate.html');
         $this->replaceOption('%option_title%', $option->getTitle());
         $this->replaceOption('%img_src%', $option->getImg());
         $this->replaceOption('%img_width%', $option->getImgWidth());

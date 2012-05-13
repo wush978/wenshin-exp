@@ -6,3 +6,4 @@
 /vendor/
 /app/config/parameters.ini
 out*
+exam_config/*

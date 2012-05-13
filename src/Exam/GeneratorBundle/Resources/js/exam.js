@@ -4,8 +4,14 @@ var Question = new Array(%question_size%);
 var question_index = 0;
 var question_size = %question_size%;
 
+var timer = new Date();
+var minutes = 1000 * 60;
+var duration_start = timer.getTime();
+
 function nextQuestion() {
-  stop();
+  if (played_time > 0) {
+    stop();
+  }
   played_time = 0;
   question_index++;
   if (question_index < question_size) {
@@ -28,9 +34,14 @@ function nextQuestion() {
     s.WriteLine(result);
     s.WriteLine(personal_data);
     s.Close();
+    var duration_end = timer.getTime();
+    if (duration_end - duration_start > minutes * 8) {
+      alert("%secret_message%")
+    }
     document.body.innerHTML = "謝謝你的作答，請將「" + file_name + "」放到老師指定的位置。" ;
   } 
 }
+
 function saveResult(result) {
   if(result) {
       Result[question_index] = result;
@@ -49,21 +60,24 @@ function retrieveAnswer() {
   }
 }
 var played_time;
+var sound_source;
 function play() {
   if (played_time >= 2) {
     return false;
   }
-  played_time++;
-  document.embeds[0].stop(); 
   alert("這次是聽第" + played_time + "次喔，總共只能聽兩次");
-    document.embeds[0].play(); 
-  
+  appendEmbed();
+  document.getElementById("input_play").style.visibility = "hidden";
+  document.getElementById("input_stop").style.visibility = "visible";
+  played_time++;
   return true;
 } 
 function stop() {
-  if (played_time > 0) {
-    document.embeds[0].stop();
-  }
+  sound_source = document.getElementById("embed").getAttribute("src");
+  document.body.innerHTML = Question[question_index];
+//  document.getElementById("embed").setAttribute("src", "");
+//  document.getElementById("input_stop").style.visibility = "hidden";
+//  document.getElementById("input_play").style.visibility = "visible";
 }
 //%assign_Question%
 //%assign_Sound_src%
@@ -194,4 +208,14 @@ function beginPage() {
     '音樂家教，例如鋼琴、小提琴、長笛、吉他等…<br/>' +
     '(請說明課程名稱: <input type="text" id="input_music_cram_school_subject"/>)<br/><hr/>' +
     '<input type="button" onclick="startTest()" value="開始作答"/>';    
+}
+
+function appendEmbed() {
+  var node_sound_src = document.getElementById("sound_source_input").value;
+  var node = document.createElement("embed");
+  node.setAttribute("id", "embed")
+  node.setAttribute("src",node_sound_src); 
+  node.setAttribute("autostart","true"); 
+  node.setAttribute("hidden","true");  
+  document.body.appendChild(node);
 }
